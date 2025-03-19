@@ -1,0 +1,539 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Task Management API Documentation",
+    "version": "1.0.0",
+    "description": "This is the API documentation for the Task Management applciation."
+  },
+  "server": [
+    {
+      "url": "http://localhost:3000/api/v1",
+      "description": "Local Server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "Branch": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for a branch"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the branch"
+          },
+          "address": {
+            "type": "string",
+            "description": "The address of the branch"
+          },
+          "phone": {
+            "type": "string",
+            "format": "123-456-7890",
+            "description": "The phone number of the branch"
+          }
+        }
+      },
+      "Employee": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for an employee"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the employee"
+          },
+          "position": {
+            "type": "string",
+            "description": "The position of the employee"
+          },
+          "department": {
+            "type": "string",
+            "format": "letters and/or spaces",
+            "description": "The department the employee works in"
+          },
+          "email": {
+            "type": "string",
+            "format": "test@email.com or test@email.ca",
+            "description": "The email address of the employee"
+          },
+          "phone": {
+            "type": "string",
+            "format": "123-456-7890",
+            "description": "The phone number of the employee"
+          },
+          "branchId": {
+            "type": "string",
+            "description": "The unique identifier of the branch the employee works in"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/v1/branches": {
+      "post": {
+        "summary": "Create a new branch",
+        "tags": [
+          "Branch"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Branch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The created branch"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get all branches",
+        "tags": [
+          "Branch"
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of all branches",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "Branch array",
+                  "items": {
+                    "$ref": "#/components/schemas/Branch"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/branches/{id}": {
+      "GET": {
+        "summary": "Get a branch by ID",
+        "tags": [
+          "Branch"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the branch to retrieve"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The retrieved branch",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "Branch",
+                  "items": {
+                    "$ref": "#/components/schemas/Branch"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Document with id ${id} not found in collection ${collectionName}"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an existing branch",
+        "tags": [
+          "Branch"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the branch to update"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "address": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The updated branch"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Document with id ${id} not found in collection ${collectionName}"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a branch",
+        "tags": [
+          "Branch"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the branch to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The branch is deleted from the list"
+          },
+          "404": {
+            "description": "Document with id ${id} not found in collection ${collectionName}"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/employees": {
+      "post": {
+        "summary": "Create a new employee",
+        "tags": [
+          "Employee"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Employee"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The created employee"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "get": {
+        "summary": "Get all employees",
+        "tags": [
+          "Employee"
+        ],
+        "responses": {
+          "200": {
+            "description": "All employees",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "Employee array",
+                  "items": {
+                    "$ref": "#/components/schemas/Employee"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/employees/{id}": {
+      "get": {
+        "summary": "Get an employee by ID",
+        "tags": [
+          "Employee"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the employee to retrieve"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The retrieved employee",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "Employee",
+                  "items": {
+                    "$ref": "#/components/schemas/Employee"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Document with id ${id} not found in collection ${collectionName}"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an existing employee",
+        "tags": [
+          "Employee"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the employee to update"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "position": {
+                    "type": "string"
+                  },
+                  "department": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "branchId": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The updated employee"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Document with id ${id} not found in collection ${collectionName}"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an employee",
+        "tags": [
+          "Employee"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the employee to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The employee is deleted from the list"
+          },
+          "404": {
+            "description": "Document with id ${id} not found in collection ${collectionName}"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/employees/branches/{branchId}": {
+      "get": {
+        "summary": "Get all employees for a branch",
+        "tags": [
+          "Employee"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "branchId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the branch to retrieve employee list from"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "Maximum number of employees to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The retrieved branch employee list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "Employee array",
+                  "items": {
+                    "$ref": "#/components/schemas/Employee"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No documents found in collection ${collectionName} where ${fieldName} is ${String(fieldValue)}"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/v1/employees/departments/{department}": {
+      "get": {
+        "summary": "Get employees by department",
+        "tags": [
+          "Employee"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "department",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "ID of the department to retrieve employee list from"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "required": false,
+            "description": "Maximum number of employees to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The retrieved department employee list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "Employee array",
+                  "items": {
+                    "$ref": "#/components/schemas/Employee"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No documents found in collection ${collectionName} where ${fieldName} is ${String(fieldValue)}"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "tags": []
+}
