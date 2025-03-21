@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Task Management API Documentation",
+    "title": "Employee Directory and Branch Management API Documentation",
     "version": "1.0.0",
-    "description": "This is the API documentation for the Task Management applciation."
+    "description": "This is the API documentation for the Employee Directory and Branch Management applciation."
   },
   "server": [
     {
